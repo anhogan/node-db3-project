@@ -54,9 +54,8 @@ function update(changes, id) {
     });
 };
 
-// Fix to return deleted object
 function remove(id) {
-  return db('schemes').where({ id }).select()
+  return db('schemes').where({ id })
     .then(scheme => {
       if (!scheme) {
         return null;
@@ -68,6 +67,4 @@ function remove(id) {
           });
       };
     });
-
-  // return db('schemes').where({ id }).del()
 };
