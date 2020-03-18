@@ -56,9 +56,18 @@ function update(changes, id) {
 
 // Fix to return deleted object
 function remove(id) {
-  return db('schemes').where({ id }).del()
-    // .then(count => {
-    //   console.log(`Deleted ${count} records`);
-    //   return json(deletedScheme);
-    // });
+  return db('schemes').where({ id }).select()
+    .then(scheme => {
+      if (!scheme) {
+        return null;
+      } else {
+        return db('schemes').where({ id }).del()
+          .then(count => {
+            console.log(`Deleted ${count} records`);
+            return scheme;
+          });
+      };
+    });
+
+  // return db('schemes').where({ id }).del()
 };
