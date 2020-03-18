@@ -18,9 +18,12 @@ function findById(id) {
   return db('schemes').where({ id }).first();
 };
 
-// Write
 function findSteps(id) {
-  return
+  return db('steps')
+    .join('schemes', 'schemes.id', 'steps.scheme_id')
+    .select('steps.id', 'schemes.scheme_name', 'steps.step_number', 'steps.instructions')
+    .where({ scheme_id: id })
+    .orderBy('steps.step_number');
 };
 
 function add(scheme) {
@@ -38,11 +41,19 @@ function addStep(step, scheme_id) {
 function update(changes, id) {
   return db('schemes').where({ id }).update(changes)
     .then(count => {
+      console.log(`Updated ${count} records`);
       return findById(id);
     });
 };
 
 // Fix to return deleted object
 function remove(id) {
-  return db('schemes').where({ id }).del();
+  const deletedScheme = findById(id);
+  console.log(deletedScheme);
+
+  return db('schemes').where({ id }).del()
+    .then(count => {
+      console.log(`Deleted ${count} records`);
+      return deletedScheme;
+    });
 };
