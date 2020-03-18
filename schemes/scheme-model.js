@@ -23,9 +23,11 @@ function findSteps(id) {
   return
 };
 
-// Fix to return full object
 function add(scheme) {
-  return db('schemes').insert(scheme);
+  return db('schemes').insert(scheme)
+    .then(id => {
+      return findById(id[0]);
+    });
 };
 
 // Write
@@ -33,9 +35,11 @@ function addStep(step, scheme_id) {
   return
 };
 
-// Fix to return updated object
 function update(changes, id) {
-  return db('schemes').where({ id }).update(changes);
+  return db('schemes').where({ id }).update(changes)
+    .then(count => {
+      return findById(id);
+    });
 };
 
 // Fix to return deleted object
