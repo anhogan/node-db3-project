@@ -33,9 +33,17 @@ function add(scheme) {
     });
 };
 
-// Write
 function addStep(step, scheme_id) {
-  return
+  const newStep = {
+    scheme_id: scheme_id,
+    step_number: step.step_number,
+    instructions: step.instructions
+  };
+
+  return db('steps').insert(newStep)
+    .then(id => {
+      return findSteps(scheme_id);
+    });
 };
 
 function update(changes, id) {
@@ -48,12 +56,9 @@ function update(changes, id) {
 
 // Fix to return deleted object
 function remove(id) {
-  const deletedScheme = findById(id);
-  console.log(deletedScheme);
-
   return db('schemes').where({ id }).del()
-    .then(count => {
-      console.log(`Deleted ${count} records`);
-      return deletedScheme;
-    });
+    // .then(count => {
+    //   console.log(`Deleted ${count} records`);
+    //   return json(deletedScheme);
+    // });
 };
